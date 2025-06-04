@@ -1,5 +1,5 @@
-#ifndef IPLAYER_H
-#define IPLAYER_H
+#ifndef PLAYER_H
+#define PLAYER_H
 
 #include<iostream>
 #include"Board.h"
