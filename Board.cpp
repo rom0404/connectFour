@@ -54,11 +54,11 @@ bool Board::isWin(int row, int col)
 
     //vertical
     if (
-        (board[row - 1][col] == color)
+        (board[row + 1][col] == color)
         &&
-        (board[row - 2][col] == color)
+        (board[row + 2][col] == color)
         &&
-        (board[row - 3][col] == color)
+        (board[row + 3][col] == color)
         ) {
         iswin = true;
     }
@@ -248,8 +248,9 @@ int Board::drop(int id, int col)
             if (board[i][col]==0)
             {
                 board[i][col] = id;
-                undoedMoves = std::stack<std::tuple<int, int, int>>();
-                moves.push(std::make_tuple(id, i, col));
+                Move move(i, col, id);
+                moves.push(move);
+                clearUndoedMoves();
                 return i;
             }
         }
@@ -268,19 +269,42 @@ bool Board::isDraw()
     else return false;
 }
 
-void Board::unDo()
+int Board::unDo()
 {
-    board[std::get<1>(moves.top())][std::get<2>(moves.top())] = 0;
-    undoedMoves.push(moves.top());
-    moves.pop();
+    if (!moves.empty())
+    {
+        board[moves.top().row][moves.top().column] = 0;
+        undoedMoves.push(moves.top());
+        moves.pop();
+        return 0;
+    }
+    else
+    {
+        std::cout << "no previous moves, please play the game\n";
+        return -1;
+    }
 }
 
-void Board::reDo()
+int Board::reDo()
 {
-    board[std::get<1>(moves.top())][std::get<2>(moves.top())] = std::get<0>(undoedMoves.top());
-    moves.push(undoedMoves.top());
-    undoedMoves.pop();
+    if (!undoedMoves.empty())
+    {
+        board[undoedMoves.top().row][undoedMoves.top().column] = undoedMoves.top().id;
+        moves.push(undoedMoves.top());
+        undoedMoves.pop();
+        return 0;
+    }
+    else
+    {
+        std::cout << "no undoed moves\n";
+        return -1;
+    }
 
+}
+
+void Board::clearUndoedMoves()
+{
+    undoedMoves = std::stack<Move>();
 }
 
 

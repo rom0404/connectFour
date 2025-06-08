@@ -23,6 +23,33 @@ int main()
             std::cout << "it's RED's turn\n";
         }
         int col=curr->getMove(board);
+        if (col==-1)
+        {
+            board.unDo();
+            if (curr == &player1)
+            {
+                curr = &player2;
+            }
+            else
+            {
+                curr = &player1;
+            }
+            continue;
+        }
+        if (col==7)
+        {
+            board.reDo();
+            if (curr == &player1)
+            {
+                curr = &player2;
+            }
+            else
+            {
+                curr = &player1;
+            }
+            continue;
+        }
+
         int row=board.drop(curr->getID(), col);
         if (board.isWin(row,col))
         {

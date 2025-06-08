@@ -5,13 +5,18 @@
 #include<vector>  
 #include<stack>
 #include<tuple>
+
+#include"Move.h"
+//#include "Player.h"
+
 class Board  
+
 {  
 private:
 	int board[6][7] = {};
 	//first int is the color, second is the row, third is the column
-	std::stack<std::tuple<int, int,int>> moves;
-	std::stack<std::tuple<int, int,int>> undoedMoves;
+	std::stack<Move> moves;
+	std::stack<Move> undoedMoves;
 
 public:  
 
@@ -21,8 +26,11 @@ public:
 	bool canDrop(int col);
 	int drop(int id, int col);
 	bool isDraw();
-	void unDo();
-	void reDo();
+	int unDo();
+	int reDo();
+	void clearUndoedMoves();
+
+	//Move manipulateBoard(Player& curr, Player player1, Player player2);
 
 	//usefull for ai implementation
 	std::vector<int> legalMoves();  
